@@ -1,30 +1,24 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout
+    QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout, QInputDialog
 from PyQt5.QtGui import QPixmap, QTransform
+from PyQt5 import uic
 
 
 class Example(QWidget):
     def __init__(self):
         super().__init__()
+        self.flag = True
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(0, 0, 10000, 960)
-        self.setWindowTitle('показ картинки')
-
-        self.btn = QPushButton('показать', self)
-        self.btn.resize(100, 50)
-        self.btn.move(200, 50)
-        self.btn.clicked.connect(self.hello)
-
-        self.url = QLabel(self)
-        self.url.setText('Что показать')
-        self.url.move(200, 250)
+        uic.loadUi('project.ui', self)
+        if self.flag:
+            self.upravlenie()
 
     def hello(self):
         try:
-            self.pixmap = QPixmap('1.jpg')
+            self.pixmap = QPixmap('pushka.jpg')
             self.angle = -45
             self.label = QLabel(self)
             t = QTransform().rotate(self.angle)
@@ -38,6 +32,27 @@ class Example(QWidget):
         try:
             t = QTransform().rotate(self.angle - naklon)
             self.label.setPixmap(self.pixmap.pixmap.transformed(t))
+        except Exception as e:
+            print(e)
+
+    def nach_okno(self):
+        try:
+            pixmap = QPixmap('w.png')
+            self.label_1 = QLabel(self)
+            self.label_1.setPixmap(self.pixmap)
+            self.label_1.move(190, 170)
+
+            pixmap_2 = QPixmap('s.png')
+            self.label_2 = QLabel(self)
+            self.label_2.setPixmap(self.pixmap_2)
+            self.label_2.move(370, 170)
+
+            pixmap_3 = QPixmap('space.png')
+            self.label_3 = QLabel(self)
+            self.label_3.setPixmap(self.pixmap_3)
+            self.label_3.move(500, 170)
+
+            self.show()
         except Exception as e:
             print(e)
 
