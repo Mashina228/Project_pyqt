@@ -1,3 +1,6 @@
+from PyQt5.QtWidgets import QHBoxLayout, QLabel
+from PyQt5.QtGui import QPixmap, QTransform
+
 def pokaz_pushki(self, nach):
     self.hbox = QHBoxLayout(self)
     self.pixmap = QPixmap('pushka.')
