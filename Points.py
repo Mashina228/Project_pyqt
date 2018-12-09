@@ -1,6 +1,6 @@
-import sys, random
+import sys
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtGui import QPainter, QColor, QPen
+from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
 
@@ -15,7 +15,7 @@ class Example(QWidget):
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('Traektoria')
 
-        #Блок настроек
+        # Блок настроек
         self.mish_x = 700
 
         self.sdvig_x = 50
@@ -33,21 +33,21 @@ class Example(QWidget):
         self.drawMishen(qp)
         qp.end()
 
-    def drawMishen(self, qp): #Отрисовка мишени
+    def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
         qp.setBrush(QColor(66, 47, 43))
         qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
-    def drawPoints(self, qp): #Отрисовка пола и траектории
+    def drawPoints(self, qp):  # Отрисовка пола и траектории
         qp.setPen(Qt.green)
 
-        for i in range(1920): #Отрисовка пола
+        for i in range(1920):  # Отрисовка пола
             qp.drawPoint(i, self.sdvig_y)
 
         qp.setPen(Qt.red)
-        for i in range(1920): #Отрисовка траектории, тут сложно, если что я объясню
+        for i in range(1920):  # Отрисовка траектории, тут сложно, если что я объясню
             k = int(i * math.tan(math.radians(self.a)) - (9.8 * i ** 2) / (
-                        2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
+                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
             x = i
             if k < 0:
                 break
