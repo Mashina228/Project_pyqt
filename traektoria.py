@@ -1,6 +1,6 @@
 from PyQt5 import Qt
 import pyqtgraph as pg
-import numpy as np
+import math
 
 
 class Window(Qt.QWidget):
@@ -21,7 +21,12 @@ class Window(Qt.QWidget):
         layout.addWidget(self.btn)
 
     def random_plot(self):
-        random_array = np.random.random_sample(20)
+        a = 60
+        v = 10
+        random_array = []
+        for i in range(10):
+            random_array.append(
+                i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2))
         self.curve.setData(random_array)
 
 
