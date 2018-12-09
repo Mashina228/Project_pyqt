@@ -21,10 +21,12 @@ class Window(Qt.QWidget):
         layout.addWidget(self.btn)
 
     def random_plot(self):
-        a = 60
+        a = 45
         v = 10
         random_array = []
-        for i in range(10):
+        for i in range(20):
+            if i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2) < 0:
+                break
             random_array.append(
                 i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2))
         self.curve.setData(random_array)
