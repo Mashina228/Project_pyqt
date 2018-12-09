@@ -12,7 +12,7 @@ class Example(QMainWindow):
         self.flag = True
         uic.loadUi('project.ui', self)
 
-        oImage = QImage("pushka.jpg")
+        oImage = QImage("fon.jpg")
         sImage = oImage.scaled(QSize(self.width(), self.height()))
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
@@ -25,7 +25,7 @@ class Example(QMainWindow):
 
     def hello(self):
         try:
-            self.pixmap = QPixmap('pushka.jpg')
+            self.pixmap = QPixmap('fon.jpg')
             self.angle = -45
             self.label = QLabel(self)
             t = QTransform().rotate(self.angle)
