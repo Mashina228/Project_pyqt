@@ -27,17 +27,12 @@ class Example(QWidget):
         qp.setPen(Qt.red)
         size = self.size()
         a = 45
-        v = 10
+        v = 52
 
-        for i in range(1000):
+        for i in range(280):
             x = i
             y = i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2)
             qp.drawPoint(x, y)
-
-            qp.drawPoint(0, 0)
-            qp.drawPoint(280, 0)
-            qp.drawPoint(0,170)
-            qp.drawPoint(28, 170)
 
 
 if __name__ == '__main__':
