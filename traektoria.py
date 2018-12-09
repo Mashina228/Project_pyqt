@@ -1,34 +1,32 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtWidgets import QMainWindow
-from ui import Ui_Form
+from PyQt5 import Qt
+import pyqtgraph as pg
+import numpy as np
 
 
-class MyWidget(QMainWindow, Ui_Form):
+class Window(Qt.QWidget):
+
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
-        self.pushButton.clicked.connect(self.run)
 
-    def run(self):
-        if self.radioButton.isChecked():
-            self.widget.clear()
-            self.widget.plot([i for i in range(10)],
-                             [i for i in range(10)],
-                             pen='r')
-        elif self.radioButton_2.isChecked():
-            self.widget.clear()
-            self.widget.plot([i for i in range(10)],
-                             [i ** 2 for i in range(10)],
-                             pen='g')
-        elif self.radioButton_3.isChecked():
-            self.widget.clear()
-            self.widget.plot([i for i in range(10)],
-                             [i ** 3 for i in range(10)],
-                             pen='b')
+        layout = Qt.QVBoxLayout(self)
+
+        self.view = view = pg.PlotWidget()
+        self.curve = view.plot(name="Line")
+
+        self.btn = Qt.QPushButton("Random plot")
+        self.btn.clicked.connect(self.random_plot)
+
+        layout.addWidget(Qt.QLabel("Some text"))
+        layout.addWidget(self.view)
+        layout.addWidget(self.btn)
+
+    def random_plot(self):
+        random_array = np.random.random_sample(20)
+        self.curve.setData(random_array)
 
 
-app = QApplication(sys.argv)
-ex = MyWidget()
-ex.show()
-sys.exit(app.exec_())
+if __name__ == "__main__":
+    app = Qt.QApplication([])
+    w = Window()
+    w.show()
+    app.exec()
