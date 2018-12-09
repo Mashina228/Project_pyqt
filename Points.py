@@ -28,10 +28,20 @@ class Example(QWidget):
         v = 52
 
         for i in range(280):
+            k = int(i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2))
             x = i
-            if i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2) < 0:
+            if k < 0:
                 break
-            y = i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2)
+            if k < int((i + 1) * math.tan(math.radians(a)) - (9.8 * (i + 1) ** 2) / (
+                    2 * v ** 2 * math.cos(math.radians(a)) ** 2)):
+                for j in range(k, int((i + 1) * math.tan(math.radians(a)) - (9.8 * (i + 1) ** 2) / (
+                        2 * v ** 2 * math.cos(math.radians(a)) ** 2))):
+                    qp.drawPoint(x, 170 - j)
+            else:
+                for j in range(int((i + 1) * math.tan(math.radians(a)) - (9.8 * (i + 1) ** 2) / (
+                        2 * v ** 2 * math.cos(math.radians(a)) ** 2)), k):
+                    qp.drawPoint(x, 170 - j)
+            y = k
             qp.drawPoint(x, 170 - y)
 
 
