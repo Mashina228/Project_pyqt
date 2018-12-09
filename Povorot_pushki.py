@@ -15,10 +15,8 @@ class Example(QMainWindow):
     def hello(self):
         try:
             self.pixmap = QPixmap('pushka.jpg')
-            self.angle = -45
             self.label = QLabel(self)
-            t = QTransform().rotate(self.angle)
-            self.label.setPixmap(self.pixmap.pixmap.transformed(t))
+            self.label.setPixmap(self.pixmap)
             self.label.move(0, self.height())
             self.show()
         except Exception as e:
