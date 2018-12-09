@@ -34,6 +34,11 @@ class Example(QWidget):
             y = i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2)
             qp.drawPoint(x, y)
 
+            qp.drawPoint(0, 0)
+            qp.drawPoint(280, 0)
+            qp.drawPoint(0,170)
+            qp.drawPoint(28, 170)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
