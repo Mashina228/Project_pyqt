@@ -9,7 +9,6 @@ class Example(QWidget):
 
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
@@ -32,7 +31,7 @@ class Example(QWidget):
         for i in range(280):
             x = i
             y = i * math.tan(math.radians(a)) - (9.8 * i ** 2) / (2 * v ** 2 * math.cos(math.radians(a)) ** 2)
-            qp.drawPoint(x, y)
+            qp.drawPoint(x, 170 - y)
 
 
 if __name__ == '__main__':
