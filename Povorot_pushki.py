@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, \
 from PyQt5.Qt import QSize
 from PyQt5.QtGui import QPixmap, QTransform, QImage, QPalette, QBrush
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 
 
 class Example(QMainWindow):
@@ -12,15 +13,18 @@ class Example(QMainWindow):
         self.flag = True
         uic.loadUi('project.ui', self)
 
-        oImage = QImage("fon.jpg")
-        sImage = oImage.scaled(QSize(self.width(), self.height()))
         palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(sImage))
+        img = QImage('fon.jpg')
+        scaled = img.scaled(self.size(), Qt.KeepAspectRatioByExpanding, transformMode=Qt.SmoothTransformation)
+        palette.setBrush(QPalette.Window, QBrush(scaled))
         self.setPalette(palette)
         self.pushButton.clicked.connect(self.cleaning_first)
 
     def cleaning_first(self):
         self.label.setText('')
+        self.label_2.setText('')
+        self.label_3.setText('')
+        self.label_4.setText('')
         self.pushButton.deleteLater()
 
     def hello(self):
