@@ -12,19 +12,11 @@ class Example(QMainWindow):
         super().__init__()
         self.flag = True
         uic.loadUi('project.ui', self)
-
-        palette = QPalette()
-        img = QImage('fon.jpg')
-        scaled = img.scaled(self.size(), Qt.KeepAspectRatioByExpanding, transformMode=Qt.SmoothTransformation)
-        palette.setBrush(QPalette.Window, QBrush(scaled))
-        self.setPalette(palette)
         self.pushButton.clicked.connect(self.cleaning_first)
+        self.show()
 
     def cleaning_first(self):
         self.label.setText('')
-        self.label_2.setText('')
-        self.label_3.setText('')
-        self.label_4.setText('')
         self.pushButton.deleteLater()
 
     def hello(self):
