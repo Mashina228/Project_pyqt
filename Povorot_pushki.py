@@ -3,15 +3,26 @@ from PyQt5.QtWidgets import QApplication, QWidget, \
     QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout, QInputDialog, QMainWindow
 from PyQt5.Qt import QSize
 from PyQt5.QtGui import QPixmap, QTransform, QImage, QPalette, QBrush
+from PyQt5.QtCore import QRect
 from PyQt5 import uic
-from PyQt5.QtCore import Qt
 
 
-class Example(QMainWindow):
+class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.flag = True
-        uic.loadUi('project.ui', self)
+        self.setGeometry(0, 0, 1920, 1080)
+
+        oImage = QImage("fon.png")
+        sImage = oImage.scaled(QSize(self.width(), self.height()))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(10, QBrush(sImage))  # 10 = Windowrole
+        self.setPalette(palette)
+
+        self.label = QLabel('название игры', self)  # test, if it's really backgroundimage
+        self.label.setGeometry(860, 500, 200, 50)
+
+        self.pushButton = QPushButton('hdsghja', self)
+        self.pushButton.setGeometry(860, 540, 100, 80)
         self.pushButton.clicked.connect(self.cleaning_first)
         self.show()
 
@@ -31,12 +42,13 @@ class Example(QMainWindow):
         except Exception as e:
             print(e)
 
-    def next(self, naklon):
-        try:
-            t = QTransform().rotate(self.angle - naklon)
-            self.label.setPixmap(self.pixmap.transformed(t))
-        except Exception as e:
-            print(e)
+
+def next(self, naklon):
+    try:
+        t = QTransform().rotate(self.angle - naklon)
+        self.label.setPixmap(self.pixmap.transformed(t))
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
