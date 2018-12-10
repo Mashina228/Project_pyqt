@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton
+from PyQt5.QtWidgets import QWidget, QApplication, QLabel
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
@@ -14,6 +14,7 @@ class Example(QWidget):
     def initUI(self):
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('Traektoria')
+
         self.flag = False
 
         # Блок настроек
@@ -24,6 +25,9 @@ class Example(QWidget):
 
         self.a = 45
         self.v = 113
+
+        self.label = QLabel(str(self.a), self)
+        self.label.setGeometry(860, 500, 200, 50)
 
         self.show()
 
@@ -36,6 +40,7 @@ class Example(QWidget):
         if event.key() == Qt.Key_S:
             if self.a >= 10:
                 self.a -= 5
+        self.label.setText(str(self.a))
 
     def paintEvent(self, e):
         qp = QPainter()
