@@ -21,7 +21,7 @@ class Example(QWidget):
         self.sdvig_x = 50
         self.sdvig_y = 725
 
-        self.a = 45
+        self.a = 40
         self.v = 113
 
         self.show()
@@ -35,7 +35,7 @@ class Example(QWidget):
 
     def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
-        qp.setBrush(QColor(66, 47, 43))
+        qp.setBrush(QColor(0, 0, 0))
         qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
     def drawPoints(self, qp):  # Отрисовка пола и траектории
@@ -50,6 +50,7 @@ class Example(QWidget):
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
             x = i
             if k < 0:
+                self.vivod('gamer over')
                 break
             if k < int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)):
@@ -63,11 +64,9 @@ class Example(QWidget):
             y = k
             qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
-            print(x + self.sdvig_x, self.sdvig_y - y)
-
             if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
-                    self.sdvig_y - 120, self.sdvig_y):
-                print('Win')
+                    self.sdvig_y - 120, self.sdvig_y + 1):
+                self.vivod('win')
                 break
 
 
