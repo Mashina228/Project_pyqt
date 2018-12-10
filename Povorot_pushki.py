@@ -24,6 +24,7 @@ class Example(QWidget):
         self.pushButton = QPushButton('hdsghja', self)
         self.pushButton.setGeometry(860, 540, 100, 80)
         self.pushButton.clicked.connect(self.cleaning_first)
+        self.pushButton.clicked.connect(self.hello)
         self.show()
 
     def cleaning_first(self):
@@ -32,23 +33,25 @@ class Example(QWidget):
 
     def hello(self):
         try:
-            self.pixmap = QPixmap('fon.jpg')
-            self.angle = -45
-            self.label = QLabel(self)
-            t = QTransform().rotate(self.angle)
-            self.label.setPixmap(self.pixmap.pixmap.transformed(t))
-            self.label.move(0, self.height())
+            self.hbox = QHBoxLayout(self)
+            self.pixmap = QPixmap("space.png")
+            self.lbl = QLabel(self)
+            self.lbl.setPixmap(self.pixmap)
+            self.hbox.addWidget(self.lbl)
+            self.setLayout(self.hbox)
             self.show()
+            self.next(-15)
         except Exception as e:
             print(e)
 
-
-def next(self, naklon):
-    try:
-        t = QTransform().rotate(self.angle - naklon)
-        self.label.setPixmap(self.pixmap.transformed(t))
-    except Exception as e:
-        print(e)
+    def next(self, naklon):
+        try:
+            t = QTransform().rotate(naklon)
+            self.lbl.setPixmap(self.pixmap.transformed(t))
+            self.hbox.addWidget(self.lbl)
+            self.setLayout(self.hbox)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
