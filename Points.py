@@ -39,15 +39,16 @@ class Example(QWidget):
         self.show()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Space:
-            self.flag = True
         if event.key() == Qt.Key_W:
             if self.a <= 80:
                 self.a += 5
+                self.label.setText(str(self.a))
         if event.key() == Qt.Key_S:
             if self.a >= 10:
                 self.a -= 5
-        self.label.setText(str(self.a))
+                self.label.setText(str(self.a))
+        if event.key() == Qt.Key_Space:
+            self.flag = True
 
     def paintEvent(self, e):
         qp = QPainter()
@@ -88,13 +89,11 @@ class Example(QWidget):
 
                 if k2 < 0:
                     self.vivod(False)
-                    self.flag = False
                     break
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
                     self.vivod(True)
-                    self.flag = False
                     break
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
@@ -112,6 +111,7 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
+        self.flag = False
 
 
 if __name__ == '__main__':
