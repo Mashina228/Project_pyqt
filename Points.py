@@ -21,7 +21,7 @@ class Example(QWidget):
         self.sdvig_x = 50
         self.sdvig_y = 725
 
-        self.a = 40
+        self.a = 45
         self.v = 113
 
         self.show()
@@ -35,7 +35,7 @@ class Example(QWidget):
 
     def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
-        qp.setBrush(QColor(0, 0, 0))
+        qp.setBrush(QColor(139, 69, 19))
         qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
     def drawPoints(self, qp):  # Отрисовка пола и траектории
@@ -45,29 +45,38 @@ class Example(QWidget):
             qp.drawPoint(i, self.sdvig_y)
 
         qp.setPen(Qt.red)
-        for i in range(1920):  # Отрисовка траектории, тут сложно, если что я объясню
-            k = int(i * math.tan(math.radians(self.a)) - (9.8 * i ** 2) / (
+        for i in range(round(self.v ** 2 * math.sin(
+                math.radians(self.a * 2)) / 9.8) + 1):  # Отрисовка траектории, тут сложно, если что я объясню
+            k1 = int(i * math.tan(math.radians(self.a)) - (9.8 * i ** 2) / (
+                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
+            k2 = int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
             x = i
-            if k < 0:
+            if k2 < 0:
                 self.vivod('gamer over')
+
+            if k1 < 0:
                 break
-            if k < int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
-                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)):
-                for j in range(k, int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
-                        2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))):
+
+            if k1 < k2:
+                for j in range(k1, k2):
                     qp.drawPoint(x + self.sdvig_x, self.sdvig_y - j)
             else:
-                for j in range(int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
-                        2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)), k):
+                for j in range(k2, k1):
                     qp.drawPoint(x + self.sdvig_x, self.sdvig_y - j)
-            y = k
+            y = k1
             qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
-
             if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                     self.sdvig_y - 120, self.sdvig_y + 1):
                 self.vivod('win')
                 break
+        qp.setPen(Qt.white)
+        for i in range(self.sdvig_y + 1, 1081):
+            for j in range(0, 1920):
+                qp.drawPoint(j, i)
+
+    def vivod(self, ishod):
+        print(ishod)
 
 
 if __name__ == '__main__':
