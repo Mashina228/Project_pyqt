@@ -33,7 +33,7 @@ class Example(QWidget):
         if event.key() == Qt.Key_W:
             if self.a <= 80:
                 self.a += 5
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key_S:
             if self.a >= 10:
                 self.a -= 5
 
