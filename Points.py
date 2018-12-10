@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
+import time
 
 
 class Example(QWidget):
@@ -18,16 +19,22 @@ class Example(QWidget):
         self.flag = False
 
         # Блок настроек
-        self.mish_x = 700
+        self.mish_x = 700  # расположение мишени
 
-        self.sdvig_x = 50
-        self.sdvig_y = 725
+        self.sdvig_x = 50  # Задаем отступ слева
+        self.sdvig_y = 725  # Задаем ширину поля
 
-        self.a = 45
-        self.v = 113
+        self.a = 45  # Изначальный угол броска
+        self.v = 113  # Начальная скорость
+
+        self.kol_hp = 3  # Количество жизней
+        self.poln_hp = self.kol_hp
 
         self.label = QLabel(str(self.a), self)
         self.label.setGeometry(860, 500, 200, 50)
+
+        self.hp = QLabel('0' * self.kol_hp, self)
+        self.hp.setGeometry(880, 500, 200, 50)
 
         self.show()
 
@@ -59,6 +66,7 @@ class Example(QWidget):
 
         for i in range(1920):  # Отрисовка пола
             qp.drawPoint(i, self.sdvig_y)
+
         if self.flag:
             qp.setPen(Qt.red)
             for i in range(round(self.v ** 2 * math.sin(
@@ -79,12 +87,14 @@ class Example(QWidget):
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
                 if k2 < 0:
-                    self.vivod('gamer over')
+                    self.vivod(False)
+                    self.flag = False
                     break
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
-                    self.vivod('win')
+                    self.vivod(True)
+                    self.flag = False
                     break
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
@@ -92,7 +102,16 @@ class Example(QWidget):
                     qp.drawPoint(j, i)
 
     def vivod(self, ishod):
-        print(ishod)
+        if ishod:
+            self.kol_hp = self.poln_hp
+            self.hp.setText('You win')
+        else:
+            if self.kol_hp >= 2:
+                self.kol_hp -= 1
+                self.hp.setText('0' * self.kol_hp)
+            else:
+                self.kol_hp = self.poln_hp
+                self.hp.setText('You lose')
 
 
 if __name__ == '__main__':
