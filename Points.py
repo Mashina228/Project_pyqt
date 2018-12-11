@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QInputDialog, QLabel
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
+import time
 
 
 class Example(QWidget):
@@ -109,6 +110,7 @@ class Example(QWidget):
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
                     qp.drawPoint(j, i)
+            self.show()
 
     def vivod(self, ishod):
         if ishod:
@@ -121,7 +123,12 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
-        self.flag = False
+        current_sec = time.localtime(time.time())[5]
+        next_current_sec = current_sec
+        while next_current_sec - current_sec != 5:
+            next_current_sec = time.localtime(time.time())[5]
+            print(current_sec, next_current_sec)
+            self.flag = False
 
 
 if __name__ == '__main__':
