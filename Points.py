@@ -41,7 +41,7 @@ class Example(QWidget):
         self.show()
 
     def run(self):
-        if self.flag_hp:
+        if self.flag:
             i, okBtnPressed = QInputDialog.getInt(
                 self, "Давайте сыграем", "Сколько вы хотите жизней?", 3, 1, 3, 1
             )
