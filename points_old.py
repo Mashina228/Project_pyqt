@@ -40,17 +40,17 @@ class Example(QWidget):
         self.show()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key_W or event.key() == 1062:
             if self.a <= 80:
                 self.a += 5
                 self.label.setText(str(self.a))
                 self.flag = False
-        if event.key() == Qt.Key_S:
+        if event.key() == Qt.Key_S or event.key() == 1067:
             if self.a >= 10:
                 self.a -= 5
                 self.label.setText(str(self.a))
                 self.flag = False
-        if event.key() == Qt.Key_Space:
+        if event.key() == Qt.Key_Space or event.key() == 32:
             self.kon = True
             self.flag = True
 
