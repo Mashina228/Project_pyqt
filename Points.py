@@ -41,13 +41,12 @@ class Example(QWidget):
         self.show()
 
     def run(self):
-        if self.flag:
-            i, okBtnPressed = QInputDialog.getInt(
-                self, "Давайте сыграем", "Сколько вы хотите жизней?", 3, 1, 3, 1
-            )
-            if okBtnPressed:
-                self.kol_hp = int(i)
-            self.hp.setText('0' * self.kol_hp)
+        i, okBtnPressed = QInputDialog.getInt(
+            self, "Давайте сыграем", "Сколько вы хотите жизней?", 3, 1, 3, 1
+        )
+        if okBtnPressed:
+            self.kol_hp = int(i)
+        self.hp.setText('0' * self.kol_hp)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_W:
