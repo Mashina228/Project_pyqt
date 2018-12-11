@@ -105,8 +105,8 @@ class Example(QWidget):
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
-                    break
                     self.vivod(True)
+                    break
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
@@ -124,12 +124,7 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
-        current_sec = time.localtime(time.time())[5]
-        next_current_sec = current_sec
-        while next_current_sec - current_sec != 5:
-            next_current_sec = time.localtime(time.time())[5]
-            print(current_sec, next_current_sec)
-            self.flag = False
+        self.flag = False
 
 
 if __name__ == '__main__':
