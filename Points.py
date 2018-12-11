@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QWidget, QApplication, QLabel
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
-import time
 
 
 class Example(QWidget):
@@ -87,14 +86,15 @@ class Example(QWidget):
                 y = k1
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
-                if k2 < 0:
+                print(k1, k2)
+
+                if k2 == 0:
                     self.vivod(False)
                     break
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
                     self.vivod(True)
-                    break
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
