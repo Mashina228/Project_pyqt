@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QInputDialog, QLabel
+from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QInputDialog
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
@@ -21,8 +21,8 @@ class Example(QWidget):
         # Блок настроек
         self.mish_x = 700  # расположение мишени
 
-        self.sdvig_x = 50  # Задаем отступ слева
-        self.sdvig_y = 725  # Задаем ширину поля
+        self.sdvig_x = 280  # Задаем отступ слева
+        self.sdvig_y = 755  # Задаем ширину поля
 
         self.a = 45  # Изначальный угол броска
         self.v = 113  # Начальная скорость
@@ -34,11 +34,8 @@ class Example(QWidget):
         self.label.setGeometry(860, 500, 200, 50)
 
         self.hp = QLabel('', self)
-        self.hp.setGeometry(880, 500, 200, 50)
-
+        self.hp.setGeometry(880, 200, 200, 50)
         self.run()
-
-        self.show()
 
     def run(self):
         i, okBtnPressed = QInputDialog.getInt(
@@ -46,26 +43,30 @@ class Example(QWidget):
         )
         if okBtnPressed:
             self.kol_hp = int(i)
-        self.hp.setText('0' * self.kol_hp)
+            self.hp.setText('0' * self.kol_hp)
+            self.show()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_W:
+        if event.key() == Qt.Key_W or event.key() == 1062:
             if self.a <= 80:
                 self.a += 5
                 self.label.setText(str(self.a))
-        if event.key() == Qt.Key_S:
+                self.flag = False
+        if event.key() == Qt.Key_S or event.key() == 1067:
             if self.a >= 10:
                 self.a -= 5
                 self.label.setText(str(self.a))
-        if event.key() == Qt.Key_Space:
+                self.flag = False
+        if event.key() == Qt.Key_Space or event.key() == 32:
+            self.kon = True
             self.flag = True
 
     def paintEvent(self, e):
-        qp = QPainter()
-        qp.begin(self)
-        self.drawPoints(qp)
-        self.drawMishen(qp)
-        qp.end()
+        self.qp = QPainter()
+        self.qp.begin(self)
+        self.drawPoints(self.qp)
+        self.drawMishen(self.qp)
+        self.qp.end()
 
     def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
@@ -97,21 +98,20 @@ class Example(QWidget):
                 y = k1
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
-                print(k1, k2)
-
-                if k2 == 0:
-                    self.vivod(False)
-                    break
-
+                #print(x + self.sdvig_x, self.sdvig_y - y)
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
-                    self.vivod(True)
+                    if self.kon:
+                        self.vivod(True)
                     break
+
+                if k2 < 0:
+                    if self.kon:
+                        self.vivod(False)
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
                     qp.drawPoint(j, i)
-            self.show()
 
     def vivod(self, ishod):
         if ishod:
@@ -124,7 +124,7 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
-        self.flag = False
+        self.kon = False
 
 
 if __name__ == '__main__':
