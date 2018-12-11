@@ -47,26 +47,25 @@ class Example(QWidget):
             self.show()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_W or event.key() == 1062:
+        if event.key() == 1062:
             if self.a <= 80:
                 self.a += 5
                 self.label.setText(str(self.a))
                 self.flag = False
-        if event.key() == Qt.Key_S or event.key() == 1067:
+        if event.key() == 1067:
             if self.a >= 10:
                 self.a -= 5
                 self.label.setText(str(self.a))
                 self.flag = False
-        if event.key() == Qt.Key_Space or event.key() == 32:
-            self.kon = True
+        if event.key() == 32:
             self.flag = True
 
     def paintEvent(self, e):
-        self.qp = QPainter()
-        self.qp.begin(self)
-        self.drawPoints(self.qp)
-        self.drawMishen(self.qp)
-        self.qp.end()
+        qp = QPainter()
+        qp.begin(self)
+        self.drawPoints(qp)
+        self.drawMishen(qp)
+        qp.end()
 
     def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
@@ -98,16 +97,14 @@ class Example(QWidget):
                 y = k1
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
-                #print(x + self.sdvig_x, self.sdvig_y - y)
-                if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
-                        self.sdvig_y - 120, self.sdvig_y + 1):
-                    if self.kon:
-                        self.vivod(True)
+                if k2 == 0:
+                    self.vivod(False)
                     break
 
-                if k2 < 0:
-                    if self.kon:
-                        self.vivod(False)
+                if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
+                        self.sdvig_y - 120, self.sdvig_y + 1) :
+                    self.vivod(True)
+                    break
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
@@ -124,7 +121,6 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
-        self.kon = False
 
 
 if __name__ == '__main__':
