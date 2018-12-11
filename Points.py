@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel
+from PyQt5.QtWidgets import QWidget, QApplication, QInputDialog, QLabel
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
 import math
@@ -32,10 +32,19 @@ class Example(QWidget):
         self.label = QLabel(str(self.a), self)
         self.label.setGeometry(860, 500, 200, 50)
 
-        self.hp = QLabel('0' * self.kol_hp, self)
+        self.hp = QLabel('', self)
         self.hp.setGeometry(880, 500, 200, 50)
 
         self.show()
+
+    def run(self):
+        if self.flag_hp:
+            i, okBtnPressed = QInputDialog.getInt(
+                self, "Давайте сыграем", "Сколько вы хотите жизней?", 3, 1, 3, 1
+            )
+            if okBtnPressed:
+                self.kol_hp = int(i)
+            self.hp.setText('0' * self.kol_hp)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_W:
@@ -94,6 +103,7 @@ class Example(QWidget):
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
+                    break
                     self.vivod(True)
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):

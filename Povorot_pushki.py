@@ -21,6 +21,7 @@ class Example(QWidget):
         self.label = QLabel('название игры', self)  # test, if it's really backgroundimage
         self.label.setGeometry(860, 500, 200, 50)
 
+
         self.pushButton = QPushButton('hdsghja', self)
         self.pushButton.setGeometry(860, 540, 100, 80)
         self.pushButton.clicked.connect(self.cleaning_first)
@@ -34,21 +35,21 @@ class Example(QWidget):
     def hello(self):
         try:
             self.hbox = QHBoxLayout(self)
+            self.label_2.move(1000, 540)
             self.pixmap = QPixmap("space.png")
-            self.lbl = QLabel(self)
-            self.lbl.setPixmap(self.pixmap)
-            self.hbox.addWidget(self.lbl)
+            self.label_2.setPixmap(self.pixmap)
+            self.hbox.addWidget(self.label_2)
             self.setLayout(self.hbox)
             self.show()
-            self.next(-15)
+            self.next(-90)
         except Exception as e:
             print(e)
 
     def next(self, naklon):
         try:
             t = QTransform().rotate(naklon)
-            self.lbl.setPixmap(self.pixmap.transformed(t))
-            self.hbox.addWidget(self.lbl)
+            self.label_2.setPixmap(self.pixmap.transformed(t))
+            self.hbox.addWidget(self.label_2)
             self.setLayout(self.hbox)
         except Exception as e:
             print(e)
