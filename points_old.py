@@ -91,16 +91,16 @@ class Example(QWidget):
                 y = k1
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
-                if k2 == 0:
-                    if self.kon:
-                        self.vivod(False)
-                    # break
-
+                #print(x + self.sdvig_x, self.sdvig_y - y)
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
                         self.sdvig_y - 120, self.sdvig_y + 1):
                     if self.kon:
                         self.vivod(True)
-                    # break
+                    break
+
+                if k2 < 0:
+                    if self.kon:
+                        self.vivod(False)
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
