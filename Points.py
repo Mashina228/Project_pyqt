@@ -36,6 +36,8 @@ class Example(QWidget):
         self.hp = QLabel('', self)
         self.hp.setGeometry(880, 500, 200, 50)
 
+        self.run()
+
         self.show()
 
     def run(self):

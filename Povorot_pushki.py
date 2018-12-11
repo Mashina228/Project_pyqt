@@ -34,23 +34,19 @@ class Example(QWidget):
 
     def hello(self):
         try:
-            self.hbox = QHBoxLayout(self)
-            self.label_2.move(1000, 540)
-            self.pixmap = QPixmap("space.png")
-            self.label_2.setPixmap(self.pixmap)
-            self.hbox.addWidget(self.label_2)
-            self.setLayout(self.hbox)
-            self.show()
-            self.next(-90)
+            self.pic = QLabel(self)
+            self.pixmap = QPixmap('pushechka.png')
+            self.pic.setPixmap(self.pixmap)
+            self.pic.move(50, 725)
+            self.pic.show()
         except Exception as e:
             print(e)
 
     def next(self, naklon):
         try:
-            t = QTransform().rotate(naklon)
-            self.label_2.setPixmap(self.pixmap.transformed(t))
-            self.hbox.addWidget(self.label_2)
-            self.setLayout(self.hbox)
+            t = QTransform().rotate(45 + naklon)
+            self.pic.setPixmap(self.pixmap.transformed(t))
+            self.hbox.addWidget(self.pic)
         except Exception as e:
             print(e)
 
