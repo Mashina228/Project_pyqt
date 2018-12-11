@@ -14,6 +14,7 @@ class Example(QWidget):
         super().__init__()
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('Traektoria')
+        self.flag_pushki = False
 
         # oImage = QImage("fon.png")
         # sImage = oImage.scaled(QSize(self.width(), self.height()))  # resize Image to widgets size
@@ -51,21 +52,22 @@ class Example(QWidget):
         self.show()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_W or event.key() == 1062:
-            if self.a <= 80:
-                self.povorot_pushki(-5)
-                self.a += 5
-                self.label.setText(str(self.a))
-                self.flag = False
-        if event.key() == Qt.Key_S or event.key() == 1067:
-            if self.a >= 10:
-                self.povorot_pushki(5)
-                self.a -= 5
-                self.label.setText(str(self.a))
-                self.flag = False
-        if event.key() == Qt.Key_Space or event.key() == 32:
-            self.kon = True
-            self.flag = True
+        if self.flag_pushki:
+            if event.key() == Qt.Key_W or event.key() == 1062:
+                if self.a <= 80:
+                    self.povorot_pushki(-5)
+                    self.a += 5
+                    self.label.setText(str(self.a))
+                    self.flag = False
+            if event.key() == Qt.Key_S or event.key() == 1067:
+                if self.a >= 10:
+                    self.povorot_pushki(5)
+                    self.a -= 5
+                    self.label.setText(str(self.a))
+                    self.flag = False
+            if event.key() == Qt.Key_Space or event.key() == 32:
+                self.kon = True
+                self.flag = True
 
     def paintEvent(self, e):
         self.qp = QPainter()
@@ -133,21 +135,32 @@ class Example(QWidget):
         self.kon = False
 
     def cleaning_first(self):
+        self.flag_pushki = True
         self.pushButton.deleteLater()
 
     def hello(self):
         self.angel = -45
         self.pic = QLabel(self)
-        self.pixmap = QPixmap('pushka (3).png')
+        self.pixmap = QPixmap('pushka (4).png')
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
-        self.pic.move(10, self.sdvig_y - 140)
+        self.vse = {-45: (5, self.sdvig_y - 187), -5: (5, self.sdvig_y - 133), -10: (6, self.sdvig_y - 139),
+                    -15: (5, self.sdvig_y - 148), -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
+                    -20: (5, self.sdvig_y - 155), -25: (5, self.sdvig_y - 160), -40: (5, self.sdvig_y - 182),
+                    -50: (6, self.sdvig_y - 191), -55: (7, self.sdvig_y - 200), -60: (8, self.sdvig_y - 205),
+                    -65: (11, self.sdvig_y - 210), -70: (14, self.sdvig_y - 214), -75: (18, self.sdvig_y - 217),
+                    -80: (20, self.sdvig_y - 220), -85: (24, self.sdvig_y - 223)}
+        self.pic.move(5, self.sdvig_y - 186)
         self.pic.show()
 
     def povorot_pushki(self, naklon):
-        self.angel += naklon
-        t = QTransform().rotate(self.angel)
-        self.pic.setPixmap(self.pixmap.transformed(t))
+        try:
+            self.angel += naklon
+            t = QTransform().rotate(self.angel)
+            self.pic.setPixmap(self.pixmap.transformed(t))
+            self.pic.move(self.vse[self.angel][0], self.vse[self.angel][1])
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
