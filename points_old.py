@@ -51,11 +51,11 @@ class Example(QWidget):
             self.flag = True
 
     def paintEvent(self, e):
-        qp = QPainter()
-        qp.begin(self)
-        self.drawPoints(qp)
-        self.drawMishen(qp)
-        qp.end()
+        self.qp = QPainter()
+        self.qp.begin(self)
+        self.drawPoints(self.qp)
+        self.drawMishen(self.qp)
+        self.qp.end()
 
     def drawMishen(self, qp):  # Отрисовка мишени
         qp.setPen(Qt.black)
@@ -114,7 +114,6 @@ class Example(QWidget):
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
         self.flag = False
-        print(self.a)
 
 
 if __name__ == '__main__':
