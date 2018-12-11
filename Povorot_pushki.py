@@ -138,10 +138,10 @@ class Example(QWidget):
     def hello(self):
         self.angel = -45
         self.pic = QLabel(self)
-        self.pixmap = QPixmap('pushka3.0.png')
+        self.pixmap = QPixmap('pushka (3).png')
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
-        self.pic.move(-1, self.sdvig_y - 128)
+        self.pic.move(10, self.sdvig_y - 140)
         self.pic.show()
 
     def povorot_pushki(self, naklon):
