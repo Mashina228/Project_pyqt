@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QPushButton, QLabel, QMainWindow
+    QPushButton, QLabel, QMainWindow, QLineEdit
 from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtGui import QPixmap, QTransform, \
     QPainter, QColor
@@ -12,38 +12,41 @@ class SecondWindow(QWidget):
     def __init__(self, parent=None):
         # Передаём ссылку на родительский элемент и чтобы виджет
         # отображался как самостоятельное окно указываем тип окна
-        super().__init__(parent, Qt.Window)
-        self.setGeometry(0, 0, 1920, 1080)
-        self.setWindowTitle('The Pushka Game')
-        self.flag_pushki = False
-        self.flag_pole = True
+        try:
+            super().__init__(parent, Qt.Window)
+            self.setGeometry(0, 0, 1920, 1080)
+            self.setWindowTitle('The Pushka Game')
+            self.flag_pushki = False
+            self.flag_pole = True
 
-        # Блок настроек
-        self.flag = False
-        self.kon = True
+            # Блок настроек
+            self.flag = False
+            self.kon = True
 
-        # Блок настроек
-        self.mish_x = 700  # расположение мишени
+            # Блок настроек
+            self.mish_x = 700  # расположение мишени
 
-        self.sdvig_x = 80  # Задаем отступ слева
-        self.sdvig_y = 725  # Задаем ширину поля
+            self.sdvig_x = 80  # Задаем отступ слева
+            self.sdvig_y = 725  # Задаем ширину поля
 
-        self.a = 45  # Изначальный угол броска
-        self.v = 113  # Начальная скорость
+            self.a = 45  # Изначальный угол броска
+            self.v = 113  # Начальная скорость
 
-        self.kol_hp = 3  # Количество жизней
+            self.kol_hp = 3  # Количество жизней
 
-        # переменная для восстановления жизней
-        self.poln_hp = self.kol_hp
+            # переменная для восстановления жизней
+            self.poln_hp = self.kol_hp
 
-        self.hp = QLabel('', self)
-        self.hp.setGeometry(1205, 0, 200, 200)
+            self.hp = QLabel('', self)
+            self.hp.setGeometry(1205, 0, 200, 200)
 
-        self.start()
+            self.start()
 
-        self.show()
+            self.show()
+        except Exception as e:
+            print(e)
 
-        # стартовое окно перед начала игры
+            # стартовое окно перед начала игры
 
     def start(self):
         self.dialog_nachalo()
@@ -74,11 +77,15 @@ class SecondWindow(QWidget):
         self.drawMishen(self.qp)
         self.qp.end()
 
-    def drawMishen(self, qp):  # Отрисовка мишени
-        if self.flag_pole:
-            qp.setPen(Qt.black)
-            qp.setBrush(QColor(139, 69, 19))
-            qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
+    def drawMishen(self, qp):  # Отрисовка мишени для первого уровня
+        try:
+            s = Main()
+            if self.flag_pole and s.lvl_chosen == 1:
+                qp.setPen(Qt.black)
+                qp.setBrush(QColor(139, 69, 19))
+                qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
+        except Exception as e:
+            print(e)
 
         # Отрисовка траектории и поля
 
@@ -234,6 +241,10 @@ class SecondWindow(QWidget):
 class Main(QWidget):
     def __init__(self):
         super().__init__()
+        self.vse_lvl = [1]
+
+        self.lvl_chosen = 1
+
         self.setGeometry(500, 200, 500, 500)
         self.setWindowTitle('The Pushka Game')
         self.flag_pushki = False
@@ -242,25 +253,44 @@ class Main(QWidget):
         self.secondWin = None
 
         # Блок настроек
-        self.flag = False
+        self.flag_Second = False
         self.kon = True
 
-        self.label_nachal = QLabel('', self)
-        self.label_nachal.setGeometry(200, 200, 200, 100)
+        self.label_nachal = QLabel('Это игра "пушка"', self)
+        self.label_nachal.setGeometry(200, 120, 200, 100)
 
         self.hp = QLabel('', self)
         self.hp.setGeometry(1205, 0, 200, 200)
 
-        self.start()
+        self.lbl_excep = QLabel('', self)
+        self.lbl_excep.setGeometry(200, 260, 200, 25)
+
+        self.level = QLineEdit(self)
+        self.level.setGeometry(320, 210, 40, 30)
+
+        self.lbl = QLabel(self)
+        self.lbl.setGeometry(185, 210, 120, 25)
+        self.lbl.setText('Выберите уровень:')
+
+        self.pushButton = QPushButton('Играть', self)
+        self.pushButton.setGeometry(185, 285, 150, 80)
+        self.pushButton.clicked.connect(self.check_lvl)
 
         self.show()
 
     # стартовое окно перед началом игры
-    def start(self):
-        self.label_nachal.setText('Это игра "пушка"')
-        self.pushButton = QPushButton('Играть', self)
-        self.pushButton.setGeometry(185, 280, 150, 80)
-        self.pushButton.clicked.connect(self.opening)
+    def check_lvl(self):
+        try:
+            a = int(self.level.text())
+            if a in self.vse_lvl:
+                self.lvl_chosen = a
+                self.flag_Second = True
+            else:
+                self.lbl_excep.setText('Скоро появится')
+            if self.flag_Second:
+                self.opening()
+        except Exception:
+            self.lbl_excep.setText('Нет такого уровня')
 
     # откратие второго окна
 
