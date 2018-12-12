@@ -211,12 +211,15 @@ class Example(QWidget):
         self.pixmap = QPixmap('pushka (4).png')
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
-        self.vse = {-45: (5, self.sdvig_y - 187), -5: (5, self.sdvig_y - 133), -10: (6, self.sdvig_y - 139),
-                    -15: (6, self.sdvig_y - 148), -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
-                    -20: (5, self.sdvig_y - 155), -25: (5, self.sdvig_y - 160), -40: (5, self.sdvig_y - 182),
-                    -50: (6, self.sdvig_y - 191), -55: (7, self.sdvig_y - 200), -60: (8, self.sdvig_y - 205),
-                    -65: (11, self.sdvig_y - 210), -70: (14, self.sdvig_y - 214), -75: (18, self.sdvig_y - 217),
-                    -80: (20, self.sdvig_y - 220), -85: (24, self.sdvig_y - 223)}
+        self.vse = {-45: (5, self.sdvig_y - 187), -5: (5, self.sdvig_y - 133),
+                    -10: (6, self.sdvig_y - 139), -15: (6, self.sdvig_y - 148),
+                    -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
+                    -20: (5, self.sdvig_y - 155), -25: (5, self.sdvig_y - 160),
+                    -40: (5, self.sdvig_y - 182), -50: (6, self.sdvig_y - 191),
+                    -55: (7, self.sdvig_y - 200), -60: (8, self.sdvig_y - 205),
+                    -65: (11, self.sdvig_y - 210), -70: (14, self.sdvig_y - 214),
+                    -75: (18, self.sdvig_y - 217), -80: (20, self.sdvig_y - 220),
+                    -85: (24, self.sdvig_y - 223)}
         self.pic.move(5, self.sdvig_y - 186)
         self.pic.show()
 
