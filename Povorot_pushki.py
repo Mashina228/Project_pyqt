@@ -15,17 +15,13 @@ class Example(QWidget):
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('Traektoria')
         self.flag_pushki = False
+        self.flag_pole = False
 
         # oImage = QImage("fon.png")
         # sImage = oImage.scaled(QSize(self.width(), self.height()))  # resize Image to widgets size
         # palette = QPalette()
         # palette.setBrush(10, QBrush(sImage))  # 10 = Windowrole
         # self.setPalette(palette)
-
-        self.pushButton = QPushButton('hdsghja', self)
-        self.pushButton.setGeometry(860, 540, 100, 80)
-        self.pushButton.clicked.connect(self.cleaning_first)
-        self.pushButton.clicked.connect(self.hello)
 
         # Блок настроек
         self.flag = False
@@ -43,31 +39,36 @@ class Example(QWidget):
         self.kol_hp = 3  # Количество жизней
         self.poln_hp = self.kol_hp
 
-        self.label = QLabel(str(self.a), self)
-        self.label.setGeometry(860, 500, 200, 50)
+        self.label_nachal = QLabel('', self)
+        self.label_nachal.setGeometry(860, 400, 1, 1)
 
         self.hp = QLabel('0' * self.kol_hp, self)
         self.hp.setGeometry(880, 500, 200, 50)
+        self.start()
 
         self.show()
 
+    def start(self):
+        self.label_nachal.setText('Это игра "пушка"')
+        self.label_nachal.resize(100, 30)
+        self.pushButton = QPushButton('начать', self)
+        self.pushButton.setGeometry(860, 540, 100, 80)
+        self.pushButton.clicked.connect(self.dialog_nachalo)
+
     def keyPressEvent(self, event):
-        if self.flag_pushki:
-            if event.key() == Qt.Key_W or event.key() == 1062:
-                if self.a <= 80:
-                    self.povorot_pushki(-5)
-                    self.a += 5
-                    self.label.setText(str(self.a))
-                    self.flag = False
-            if event.key() == Qt.Key_S or event.key() == 1067:
-                if self.a >= 10:
-                    self.povorot_pushki(5)
-                    self.a -= 5
-                    self.label.setText(str(self.a))
-                    self.flag = False
-            if event.key() == Qt.Key_Space or event.key() == 32:
-                self.kon = True
-                self.flag = True
+        if event.key() == Qt.Key_W or event.key() == 1062:
+            if self.a <= 80:
+                self.povorot_pushki(-5)
+                self.a += 5
+                self.flag = False
+        if event.key() == Qt.Key_S or event.key() == 1067:
+            if self.a >= 10:
+                self.povorot_pushki(5)
+                self.a -= 5
+                self.flag = False
+        if event.key() == Qt.Key_Space or event.key() == 32:
+            self.kon = True
+            self.flag = True
 
     def paintEvent(self, e):
         self.qp = QPainter()
@@ -77,22 +78,15 @@ class Example(QWidget):
         self.qp.end()
 
     def drawMishen(self, qp):  # Отрисовка мишени
-        qp.setPen(Qt.black)
-        qp.setBrush(QColor(139, 69, 19))
-        qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
+        if self.flag_pole:
+            qp.setPen(Qt.black)
+            qp.setBrush(QColor(139, 69, 19))
+            qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
     def drawPoints(self, qp):  # Отрисовка пола и траектории
-        qp.setPen(Qt.green)
-
-        for i in range(1920):  # Отрисовка пола
-            qp.drawPoint(i, self.sdvig_y)
-
-        qp.setPen(Qt.white)
-        for i in range(self.sdvig_y + 1, 1081):
-            for j in range(0, 1920):
-                qp.drawPoint(j, i)
 
         if self.flag:
+
             qp.setPen(Qt.red)
             for i in range(round(self.v ** 2 * math.sin(
                     math.radians(self.a * 2)) / 9.8) + 1):  # Отрисовка траектории, тут сложно, если что я объясню
@@ -120,11 +114,29 @@ class Example(QWidget):
                 if k2 < 0:
                     if self.kon:
                         self.vivod(False)
+        if self.flag_pole:
+
+            qp.setPen(Qt.green)
+
+            for i in range(1920):  # Отрисовка пола
+                qp.drawPoint(i, self.sdvig_y)
+
+            qp.setPen(Qt.white)
+            for i in range(self.sdvig_y + 1, 1081):
+                for j in range(0, 1920):
+                    qp.drawPoint(j, i)
 
     def vivod(self, ishod):
         if ishod:
             self.kol_hp = self.poln_hp
             self.hp.setText('You win')
+            self.wining = QLabel(self)
+            pix = QPixmap('youwon1.png')
+            self.wining.setPixmap(pix)
+            self.wining.move(960, 200)
+            self.wining.show()
+            self.dialog_win()
+
         else:
             if self.kol_hp >= 2:
                 self.kol_hp -= 1
@@ -134,9 +146,34 @@ class Example(QWidget):
                 self.hp.setText('You lose')
         self.kon = False
 
+    def dialog_win(self):
+        i, okBtnPressed = QInputDialog.getItem(
+            self,
+            'Вопросик',
+            'Будете ещё играть?',
+            ('Да', 'Нет'),
+            1,
+            False
+        )
+        if okBtnPressed and i == 'Да':
+            self.cleaning_first()
+            self.flag = False
+        elif i == 'Нет':
+            self.flag = True
+
     def cleaning_first(self):
-        self.flag_pushki = True
+        self.label_nachal.setText('')
+        self.label_nachal.resize(1, 1)
         self.pushButton.deleteLater()
+
+    def dialog_nachalo(self):
+        i, okBtn = QInputDialog.getInt(self,
+                                       '', '', 3, 1, 3, 1)
+        if okBtn:
+            self.kol_hp = int(i)
+            self.hello()
+            self.flag_pole = True
+            self.cleaning_first()
 
     def hello(self):
         self.angel = -45
@@ -145,7 +182,7 @@ class Example(QWidget):
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
         self.vse = {-45: (5, self.sdvig_y - 187), -5: (5, self.sdvig_y - 133), -10: (6, self.sdvig_y - 139),
-                    -15: (5, self.sdvig_y - 148), -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
+                    -15: (6, self.sdvig_y - 148), -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
                     -20: (5, self.sdvig_y - 155), -25: (5, self.sdvig_y - 160), -40: (5, self.sdvig_y - 182),
                     -50: (6, self.sdvig_y - 191), -55: (7, self.sdvig_y - 200), -60: (8, self.sdvig_y - 205),
                     -65: (11, self.sdvig_y - 210), -70: (14, self.sdvig_y - 214), -75: (18, self.sdvig_y - 217),
