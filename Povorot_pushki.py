@@ -14,7 +14,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.setGeometry(0, 0, 1920, 1080)
-        self.setWindowTitle('Traektoria')
+        self.setWindowTitle('The Pushka Game')
         self.flag_pushki = False
         self.flag_pole = False
 
@@ -41,7 +41,10 @@ class Example(QWidget):
         self.poln_hp = self.kol_hp
 
         self.label_nachal = QLabel('', self)
-        self.label_nachal.setGeometry(860, 400, 1, 1)
+        self.label_nachal.setGeometry(680, 300, 200, 100)
+
+        self.hp = QLabel('', self)
+        self.hp.setGeometry(1205, 0, 200, 200)
 
         self.start()
 
@@ -49,9 +52,8 @@ class Example(QWidget):
 
     def start(self):
         self.label_nachal.setText('Это игра "пушка"')
-        self.label_nachal.resize(100, 60)
-        self.pushButton = QPushButton('начать', self)
-        self.pushButton.setGeometry(860, 540, 100, 80)
+        self.pushButton = QPushButton('Играть', self)
+        self.pushButton.setGeometry(660, 400, 150, 80)
         self.pushButton.clicked.connect(self.dialog_nachalo)
 
     def keyPressEvent(self, event):
@@ -111,7 +113,7 @@ class Example(QWidget):
                     break
 
                 if i == round(self.v ** 2 * math.sin(
-                    math.radians(self.a * 2)) / 9.8):
+                        math.radians(self.a * 2)) / 9.8):
                     if self.kon:
                         self.vivod(False)
         if self.flag_pole:
@@ -142,7 +144,7 @@ class Example(QWidget):
         else:
             if self.kol_hp >= 2:
                 self.kol_hp -= 1
-                self.hp.setText('0' * self.kol_hp)
+                self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
@@ -174,21 +176,21 @@ class Example(QWidget):
 
     def dialog_nachalo(self):
         i, okBtn = QInputDialog.getInt(self,
-                                       '', '', 3, 1, 3, 1)
+                                       'Количество жизней', 'Сколыько жизней?', 3, 1, 5, 1)
         if okBtn:
             self.kol_hp = int(i)
-            self.hello()
             self.flag_pole = True
             self.cleaning_first()
-            self.hp = QLabel('Ваши Жизни:' + '0' * self.kol_hp, self)
-            self.hp.setGeometry(1500, 100, 200, 100)
+            self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
+            self.hello()
             self.hp.show()
 
     def hello(self):
 
-        #self.podskaz = QLabel('', self)
-        #self.podskaz.setGeometry(860, 400, 1, 1)
-
+        self.podskaz = QLabel('', self)
+        self.podskaz.setGeometry(1200, 200, 200, 100)
+        self.podskaz.setText('W - Поднять пушку,\nS - Опустить пушку,\nSpace - Выстрел ')
+        self.podskaz.show()
 
         self.angel = -45
         self.pic = QLabel(self)
