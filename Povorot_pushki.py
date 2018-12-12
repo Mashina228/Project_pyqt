@@ -1,22 +1,22 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout, QMainWindow
-from PyQt5.Qt import QSize
+    QPushButton, QLabel, QMainWindow
 from PyQt5.QtWidgets import QInputDialog
-from PyQt5.QtGui import QPixmap, QTransform, QImage, QPalette, QBrush, QPainter, QColor
+from PyQt5.QtGui import QPixmap, QTransform, \
+    QPainter, QColor
 import math
 from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QRect
-from PyQt5 import uic
 
 
-class Example(QWidget):
-    def __init__(self):
-        super().__init__()
+class SecondWindow(QWidget):
+    def __init__(self, parent=None):
+        # Передаём ссылку на родительский элемент и чтобы виджет
+        # отображался как самостоятельное окно указываем тип окна
+        super().__init__(parent, Qt.Window)
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('The Pushka Game')
         self.flag_pushki = False
-        self.flag_pole = False
+        self.flag_pole = True
 
         # Блок настроек
         self.flag = False
@@ -36,9 +36,6 @@ class Example(QWidget):
         # переменная для восстановления жизней
         self.poln_hp = self.kol_hp
 
-        self.label_nachal = QLabel('', self)
-        self.label_nachal.setGeometry(680, 300, 200, 100)
-
         self.hp = QLabel('', self)
         self.hp.setGeometry(1205, 0, 200, 200)
 
@@ -46,15 +43,12 @@ class Example(QWidget):
 
         self.show()
 
-    # стартовое окно перед начала игры
+        # стартовое окно перед начала игры
+
     def start(self):
-        self.label_nachal.setText('Это игра "пушка"')
+        self.dialog_nachalo()
 
-        self.pushButton = QPushButton('Играть', self)
-        self.pushButton.setGeometry(660, 400, 150, 80)
-        self.pushButton.clicked.connect(self.dialog_nachalo)
-
-    # считывание нажаний для подъема и опускания пушки
+        # считывание нажаний для подъема и опускания пушки
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_W or event.key() == 1062:  # поднять пушку
@@ -71,7 +65,7 @@ class Example(QWidget):
             self.kon = True
             self.flag = True
 
-    # отрисовка полета
+        # отрисовка полета
 
     def paintEvent(self, e):
         self.qp = QPainter()
@@ -86,7 +80,7 @@ class Example(QWidget):
             qp.setBrush(QColor(139, 69, 19))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
-    # Отрисовка траектории и поля
+        # Отрисовка траектории и поля
 
     def drawPoints(self, qp):
 
@@ -134,7 +128,7 @@ class Example(QWidget):
                 for j in range(0, 1920):
                     qp.drawPoint(j, i)
 
-    # вывод результата победы или проигрыша
+        # вывод результата победы или проигрыша
 
     def vivod(self, ishod):
         if ishod:
@@ -169,12 +163,12 @@ class Example(QWidget):
                 self.pushButton2.show()
         self.kon = False
 
-    # закрытие окна конец программы
+        # закрытие окна конец программы
 
     def run(self):
         QMainWindow.close(self)
 
-    # очистка первого окна для стрельбы
+        # очистка первого окна для стрельбы
 
     def cleaning_first(self):
         self.label_nachal.setText('')
@@ -194,17 +188,19 @@ class Example(QWidget):
         if okBtn:
             self.kol_hp = int(i)
             self.flag_pole = True
-            self.cleaning_first()
             self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
             self.hello()
             self.hp.show()
 
     def hello(self):
+        # показ инструкции
 
         self.podskaz = QLabel('', self)
         self.podskaz.setGeometry(1200, 200, 200, 100)
         self.podskaz.setText('W - Поднять пушку,\nS - Опустить пушку,\nSpace - Выстрел ')
         self.podskaz.show()
+
+        # показ пушки
 
         self.angel = -45
         self.pic = QLabel(self)
@@ -223,6 +219,8 @@ class Example(QWidget):
         self.pic.move(5, self.sdvig_y - 186)
         self.pic.show()
 
+    # реализация наклона пушки
+
     def povorot_pushki(self, naklon):
         try:
             self.angel += naklon
@@ -233,8 +231,47 @@ class Example(QWidget):
             print(e)
 
 
+class Main(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(500, 200, 500, 500)
+        self.setWindowTitle('The Pushka Game')
+        self.flag_pushki = False
+        self.flag_pole = False
+
+        self.secondWin = None
+
+        # Блок настроек
+        self.flag = False
+        self.kon = True
+
+        self.label_nachal = QLabel('', self)
+        self.label_nachal.setGeometry(200, 200, 200, 100)
+
+        self.hp = QLabel('', self)
+        self.hp.setGeometry(1205, 0, 200, 200)
+
+        self.start()
+
+        self.show()
+
+    # стартовое окно перед началом игры
+    def start(self):
+        self.label_nachal.setText('Это игра "пушка"')
+        self.pushButton = QPushButton('Играть', self)
+        self.pushButton.setGeometry(185, 280, 150, 80)
+        self.pushButton.clicked.connect(self.opening)
+
+    # откратие второго окна
+
+    def opening(self):
+        if not self.secondWin:
+            self.secondWin = SecondWindow(self)
+        self.secondWin.show()
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = Main()
     ex.show()
     sys.exit(app.exec_())
