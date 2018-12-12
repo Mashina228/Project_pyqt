@@ -18,12 +18,6 @@ class Example(QWidget):
         self.flag_pushki = False
         self.flag_pole = False
 
-        # oImage = QImage("fon.png")
-        # sImage = oImage.scaled(QSize(self.width(), self.height()))  # resize Image to widgets size
-        # palette = QPalette()
-        # palette.setBrush(10, QBrush(sImage))  # 10 = Windowrole
-        # self.setPalette(palette)
-
         # Блок настроек
         self.flag = False
         self.kon = True
@@ -38,6 +32,8 @@ class Example(QWidget):
         self.v = 113  # Начальная скорость
 
         self.kol_hp = 3  # Количество жизней
+
+        # переменная для восстановления жизней
         self.poln_hp = self.kol_hp
 
         self.label_nachal = QLabel('', self)
@@ -50,26 +46,32 @@ class Example(QWidget):
 
         self.show()
 
+    # стартовое окно перед начала игры
     def start(self):
         self.label_nachal.setText('Это игра "пушка"')
+
         self.pushButton = QPushButton('Играть', self)
         self.pushButton.setGeometry(660, 400, 150, 80)
         self.pushButton.clicked.connect(self.dialog_nachalo)
 
+    # считывание нажаний для подъема и опускания пушки
+
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_W or event.key() == 1062:
+        if event.key() == Qt.Key_W or event.key() == 1062:  # поднять пушку
             if self.a <= 80:
                 self.povorot_pushki(-5)
                 self.a += 5
                 self.flag = False
-        if event.key() == Qt.Key_S or event.key() == 1067:
+        if event.key() == Qt.Key_S or event.key() == 1067:  # опустить пушку
             if self.a >= 10:
                 self.povorot_pushki(5)
                 self.a -= 5
                 self.flag = False
-        if event.key() == Qt.Key_Space or event.key() == 32:
+        if event.key() == Qt.Key_Space or event.key() == 32:  # выстрелить
             self.kon = True
             self.flag = True
+
+    # отрисовка полета
 
     def paintEvent(self, e):
         self.qp = QPainter()
@@ -84,13 +86,16 @@ class Example(QWidget):
             qp.setBrush(QColor(139, 69, 19))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
-    def drawPoints(self, qp):  # Отрисовка пола и траектории
+    # Отрисовка траектории и поля
+
+    def drawPoints(self, qp):
 
         if self.flag:
 
             qp.setPen(Qt.red)
             for i in range(round(self.v ** 2 * math.sin(
-                    math.radians(self.a * 2)) / 9.8) + 1):  # Отрисовка траектории, тут сложно, если что я объясню
+                    math.radians(self.a * 2)) / 9.8) + 1):
+
                 k1 = int(i * math.tan(math.radians(self.a)) - (9.8 * i ** 2) / (
                         2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2))
                 k2 = int((i + 1) * math.tan(math.radians(self.a)) - (9.8 * (i + 1) ** 2) / (
@@ -120,13 +125,16 @@ class Example(QWidget):
 
             qp.setPen(Qt.green)
 
-            for i in range(1920):  # Отрисовка пола
+            # Отрисовка пола
+            for i in range(1920):
                 qp.drawPoint(i, self.sdvig_y)
 
             qp.setPen(Qt.white)
             for i in range(self.sdvig_y + 1, 1081):
                 for j in range(0, 1920):
                     qp.drawPoint(j, i)
+
+    # вывод результата победы или проигрыша
 
     def vivod(self, ishod):
         if ishod:
@@ -137,6 +145,7 @@ class Example(QWidget):
             self.wining.setPixmap(pix)
             self.wining.move(0, 0)
             self.wining.show()
+            #
             self.pushButton2 = QPushButton('Закрыть', self)
             self.pushButton2.setGeometry(960, 200, 100, 100)
             self.pushButton2.clicked.connect(self.run)
@@ -153,21 +162,26 @@ class Example(QWidget):
                 self.wining.setPixmap(pix)
                 self.wining.move(0, 0)
                 self.wining.show()
+                #
                 self.pushButton2 = QPushButton('Закрыть', self)
                 self.pushButton2.setGeometry(960, 200, 100, 100)
                 self.pushButton2.clicked.connect(self.run)
                 self.pushButton2.show()
         self.kon = False
 
+    # закрытие окна конец программы
+
     def run(self):
         QMainWindow.close(self)
+
+    # очистка первого окна для стрельбы
 
     def cleaning_first(self):
         self.label_nachal.setText('')
         self.label_nachal.resize(1, 1)
         self.pushButton.deleteLater()
 
-    def cleaning_second(self):
+    def cleaning_second(self):  # Фунция для будущего продолжения проекта
         self.pushButton2.deleteLater()
         self.hp.setText('')
         t = QTransform().rotate(-45)
