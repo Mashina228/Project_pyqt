@@ -188,7 +188,7 @@ class Example(QWidget):
         self.pic.setPixmap(self.pixmap.transformed(t))
         self.pic.move()
 
-    def dialog_nachalo(self):
+    def dialog_nachalo(self): # диалоговое окно для выбора жизни в начале игры
         i, okBtn = QInputDialog.getInt(self,
                                        'Количество жизней', 'Сколыько жизней?', 3, 1, 5, 1)
         if okBtn:
