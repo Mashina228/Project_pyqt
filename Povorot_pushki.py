@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout, QInputDialog, QMainWindow
+    QPushButton, QLabel, QLineEdit, QLCDNumber, QHBoxLayout, QMainWindow
 from PyQt5.Qt import QSize
+from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtGui import QPixmap, QTransform, QImage, QPalette, QBrush, QPainter, QColor
 import math
 from PyQt5.QtCore import Qt
@@ -42,15 +43,13 @@ class Example(QWidget):
         self.label_nachal = QLabel('', self)
         self.label_nachal.setGeometry(860, 400, 1, 1)
 
-        self.hp = QLabel('0' * self.kol_hp, self)
-        self.hp.setGeometry(880, 500, 200, 50)
         self.start()
 
         self.show()
 
     def start(self):
         self.label_nachal.setText('Это игра "пушка"')
-        self.label_nachal.resize(100, 30)
+        self.label_nachal.resize(100, 60)
         self.pushButton = QPushButton('начать', self)
         self.pushButton.setGeometry(860, 540, 100, 80)
         self.pushButton.clicked.connect(self.dialog_nachalo)
@@ -111,7 +110,8 @@ class Example(QWidget):
                         self.vivod(True)
                     break
 
-                if k2 < 0:
+                if i == round(self.v ** 2 * math.sin(
+                    math.radians(self.a * 2)) / 9.8):
                     if self.kon:
                         self.vivod(False)
         if self.flag_pole:
@@ -133,10 +133,12 @@ class Example(QWidget):
             self.wining = QLabel(self)
             pix = QPixmap('youwon1.png')
             self.wining.setPixmap(pix)
-            self.wining.move(960, 200)
+            self.wining.move(0, 0)
             self.wining.show()
-            self.dialog_win()
-
+            self.pushButton2 = QPushButton('Закрыть', self)
+            self.pushButton2.setGeometry(960, 200, 100, 100)
+            self.pushButton2.clicked.connect(self.run)
+            self.pushButton2.show()
         else:
             if self.kol_hp >= 2:
                 self.kol_hp -= 1
@@ -144,27 +146,31 @@ class Example(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
+                self.wining = QLabel(self)
+                pix = QPixmap('game.png')
+                self.wining.setPixmap(pix)
+                self.wining.move(0, 0)
+                self.wining.show()
+                self.pushButton2 = QPushButton('Закрыть', self)
+                self.pushButton2.setGeometry(960, 200, 100, 100)
+                self.pushButton2.clicked.connect(self.run)
+                self.pushButton2.show()
         self.kon = False
 
-    def dialog_win(self):
-        i, okBtnPressed = QInputDialog.getItem(
-            self,
-            'Вопросик',
-            'Будете ещё играть?',
-            ('Да', 'Нет'),
-            1,
-            False
-        )
-        if okBtnPressed and i == 'Да':
-            self.cleaning_first()
-            self.flag = False
-        elif i == 'Нет':
-            self.flag = True
+    def run(self):
+        QMainWindow.close(self)
 
     def cleaning_first(self):
         self.label_nachal.setText('')
         self.label_nachal.resize(1, 1)
         self.pushButton.deleteLater()
+
+    def cleaning_second(self):
+        self.pushButton2.deleteLater()
+        self.hp.setText('')
+        t = QTransform().rotate(-45)
+        self.pic.setPixmap(self.pixmap.transformed(t))
+        self.pic.move()
 
     def dialog_nachalo(self):
         i, okBtn = QInputDialog.getInt(self,
@@ -174,8 +180,16 @@ class Example(QWidget):
             self.hello()
             self.flag_pole = True
             self.cleaning_first()
+            self.hp = QLabel('Ваши Жизни:' + '0' * self.kol_hp, self)
+            self.hp.setGeometry(1500, 100, 200, 100)
+            self.hp.show()
 
     def hello(self):
+
+        #self.podskaz = QLabel('', self)
+        #self.podskaz.setGeometry(860, 400, 1, 1)
+
+
         self.angel = -45
         self.pic = QLabel(self)
         self.pixmap = QPixmap('pushka (4).png')
