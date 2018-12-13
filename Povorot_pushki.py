@@ -15,7 +15,7 @@ class SecondWindow(QWidget):
         super().__init__(parent, Qt.Window)
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('The Pushka Game')
-        
+
         self.chosen_lvl = -1
 
         self.flag_pole = False
