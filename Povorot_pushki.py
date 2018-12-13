@@ -205,7 +205,7 @@ class SecondWindow(QWidget):
 
     def dialog_lvl(self):
         i, okBtn = QInputDialog.getInt(self,
-                                       'Уровень', 'Какой уровень?', 1, 1, 1, 1)
+                                       'Уровень', 'Какой уровень?', 1, 1, 2, 1)
         if okBtn:
             self.chosen_lvl = i
             self.flag_lvl = True
