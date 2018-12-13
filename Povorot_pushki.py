@@ -209,6 +209,7 @@ class SecondWindow(QWidget):
         if okBtn:
             self.chosen_lvl = i
             self.flag_lvl = True
+
     def hello(self):
         # показ инструкции
 
