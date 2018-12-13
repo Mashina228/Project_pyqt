@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QPushButton, QLabel, QMainWindow, QLineEdit
+    QPushButton, QLabel, QMainWindow
 from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtGui import QPixmap, QTransform, \
     QPainter, QColor
@@ -12,43 +12,43 @@ class SecondWindow(QWidget):
     def __init__(self, parent=None):
         # Передаём ссылку на родительский элемент и чтобы виджет
         # отображался как самостоятельное окно указываем тип окна
-        try:
-            super().__init__(parent, Qt.Window)
-            self.setGeometry(0, 0, 1920, 1080)
-            self.setWindowTitle('The Pushka Game')
-            self.flag_pushki = False
-            self.flag_pole = True
+        super().__init__(parent, Qt.Window)
+        self.setGeometry(0, 0, 1920, 1080)
+        self.setWindowTitle('The Pushka Game')
+        self.chosen_lvl = -1
 
-            # Блок настроек
-            self.flag = False
-            self.kon = True
+        self.flag_pole = False
+        self.flag_lvl = False
 
-            # Блок настроек
-            self.mish_x = 700  # расположение мишени
+        # Блок настроек
+        self.flag = False
+        self.kon = True
 
-            self.sdvig_x = 80  # Задаем отступ слева
-            self.sdvig_y = 725  # Задаем ширину поля
+        # Блок настроек
+        self.mish_x = 700  # расположение мишени
 
-            self.a = 45  # Изначальный угол броска
-            self.v = 113  # Начальная скорость
+        self.sdvig_x = 80  # Задаем отступ слева
+        self.sdvig_y = 725  # Задаем ширину поля
 
-            self.kol_hp = 3  # Количество жизней
+        self.a = 45  # Изначальный угол броска
+        self.v = 113  # Начальная скорость
 
-            # переменная для восстановления жизней
-            self.poln_hp = self.kol_hp
+        self.kol_hp = 3  # Количество жизней
 
-            self.hp = QLabel('', self)
-            self.hp.setGeometry(1205, 0, 200, 200)
+        # переменная для восстановления жизней
+        self.poln_hp = self.kol_hp
 
-            self.start()
+        self.hp = QLabel('', self)
+        self.hp.setGeometry(1205, 0, 200, 200)
 
+        self.start()
+        if self.flag_lvl and self.flag_pole:
             self.show()
-        except Exception as e:
-            print(e)
 
-            # стартовое окно перед начала игры
+        # стартовое окно перед начала игры
 
     def start(self):
+        self.dialog_lvl()
         self.dialog_nachalo()
 
         # считывание нажаний для подъема и опускания пушки
@@ -77,15 +77,11 @@ class SecondWindow(QWidget):
         self.drawMishen(self.qp)
         self.qp.end()
 
-    def drawMishen(self, qp):  # Отрисовка мишени для первого уровня
-        try:
-            s = Main()
-            if self.flag_pole and s.lvl_chosen == 1:
-                qp.setPen(Qt.black)
-                qp.setBrush(QColor(139, 69, 19))
-                qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
-        except Exception as e:
-            print(e)
+    def drawMishen(self, qp):  # Отрисовка мишени
+        if self.flag_pole and self.chosen_lvl == 1:
+            qp.setPen(Qt.black)
+            qp.setBrush(QColor(139, 69, 19))
+            qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
         # Отрисовка траектории и поля
 
@@ -191,7 +187,7 @@ class SecondWindow(QWidget):
 
     def dialog_nachalo(self):
         i, okBtn = QInputDialog.getInt(self,
-                                       'Количество жизней', 'Сколыько жизней?', 3, 1, 5, 1)
+                                       'Количество жизней', 'Сколько жизней?', 3, 1, 5, 1)
         if okBtn:
             self.kol_hp = int(i)
             self.flag_pole = True
@@ -199,6 +195,12 @@ class SecondWindow(QWidget):
             self.hello()
             self.hp.show()
 
+    def dialog_lvl(self):
+        i, okBtn = QInputDialog.getInt(self,
+                                       'Уровень', 'Какой уровень?', 1, 1, 1, 1)
+        if okBtn:
+            self.chosen_lvl = i
+            self.flag_lvl = True
     def hello(self):
         # показ инструкции
 
@@ -241,10 +243,6 @@ class SecondWindow(QWidget):
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        self.vse_lvl = [1]
-
-        self.lvl_chosen = 1
-
         self.setGeometry(500, 200, 500, 500)
         self.setWindowTitle('The Pushka Game')
         self.flag_pushki = False
@@ -253,51 +251,32 @@ class Main(QWidget):
         self.secondWin = None
 
         # Блок настроек
-        self.flag_Second = False
+        self.flag = False
         self.kon = True
 
-        self.label_nachal = QLabel('Это игра "пушка"', self)
-        self.label_nachal.setGeometry(200, 120, 200, 100)
+        self.label_nachal = QLabel('', self)
+        self.label_nachal.setGeometry(200, 200, 200, 100)
 
         self.hp = QLabel('', self)
         self.hp.setGeometry(1205, 0, 200, 200)
 
-        self.lbl_excep = QLabel('', self)
-        self.lbl_excep.setGeometry(200, 260, 200, 25)
-
-        self.level = QLineEdit(self)
-        self.level.setGeometry(320, 210, 40, 30)
-
-        self.lbl = QLabel(self)
-        self.lbl.setGeometry(185, 210, 120, 25)
-        self.lbl.setText('Выберите уровень:')
-
-        self.pushButton = QPushButton('Играть', self)
-        self.pushButton.setGeometry(185, 285, 150, 80)
-        self.pushButton.clicked.connect(self.check_lvl)
+        self.start()
 
         self.show()
 
     # стартовое окно перед началом игры
-    def check_lvl(self):
-        try:
-            a = int(self.level.text())
-            if a in self.vse_lvl:
-                self.lvl_chosen = a
-                self.flag_Second = True
-            else:
-                self.lbl_excep.setText('Скоро появится')
-            if self.flag_Second:
-                self.opening()
-        except Exception:
-            self.lbl_excep.setText('Нет такого уровня')
+    def start(self):
+        self.label_nachal.setText('Это игра "пушка"')
+        self.pushButton = QPushButton('Играть', self)
+        self.pushButton.setGeometry(185, 280, 150, 80)
+        self.pushButton.clicked.connect(self.opening)
 
     # откратие второго окна
 
     def opening(self):
         if not self.secondWin:
             self.secondWin = SecondWindow(self)
-        self.secondWin.show()
+        self.secondWin = None
 
 
 if __name__ == '__main__':
