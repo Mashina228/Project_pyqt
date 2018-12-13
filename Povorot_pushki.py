@@ -15,8 +15,11 @@ class SecondWindow(QWidget):
         super().__init__(parent, Qt.Window)
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowTitle('The Pushka Game')
-        self.flag_pushki = False
-        self.flag_pole = True
+
+        self.chosen_lvl = -1
+
+        self.flag_pole = False
+        self.flag_lvl = False
 
         # Блок настроек
         self.flag = False
@@ -41,11 +44,13 @@ class SecondWindow(QWidget):
 
         self.start()
 
-        self.show()
+        if self.flag_lvl and self.flag_pole:
+            self.show()
 
         # стартовое окно перед начала игры
 
     def start(self):
+        self.dialog_lvl()
         self.dialog_nachalo()
 
         # считывание нажаний для подъема и опускания пушки
@@ -56,11 +61,13 @@ class SecondWindow(QWidget):
                 self.povorot_pushki(-5)
                 self.a += 5
                 self.flag = False
+
         if event.key() == Qt.Key_S or event.key() == 1067:  # опустить пушку
             if self.a >= 10:
                 self.povorot_pushki(5)
                 self.a -= 5
                 self.flag = False
+
         if event.key() == Qt.Key_Space or event.key() == 32:  # выстрелить
             self.kon = True
             self.flag = True
@@ -75,7 +82,7 @@ class SecondWindow(QWidget):
         self.qp.end()
 
     def drawMishen(self, qp):  # Отрисовка мишени
-        if self.flag_pole:
+        if self.flag_pole and self.chosen_lvl == 1:
             qp.setPen(Qt.black)
             qp.setBrush(QColor(139, 69, 19))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
@@ -85,7 +92,6 @@ class SecondWindow(QWidget):
     def drawPoints(self, qp):
 
         if self.flag:
-
             qp.setPen(Qt.red)
             for i in range(round(self.v ** 2 * math.sin(
                     math.radians(self.a * 2)) / 9.8) + 1):
@@ -134,6 +140,7 @@ class SecondWindow(QWidget):
         if ishod:
             self.kol_hp = self.poln_hp
             self.hp.setText('You win')
+
             self.wining = QLabel(self)
             pix = QPixmap('youwon1.png')
             self.wining.setPixmap(pix)
@@ -151,12 +158,14 @@ class SecondWindow(QWidget):
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
+
                 self.wining = QLabel(self)
                 pix = QPixmap('game.png')
                 self.wining.setPixmap(pix)
                 self.wining.move(0, 0)
                 self.wining.show()
                 #
+
                 self.pushButton2 = QPushButton('Закрыть', self)
                 self.pushButton2.setGeometry(960, 200, 100, 100)
                 self.pushButton2.clicked.connect(self.run)
@@ -168,7 +177,7 @@ class SecondWindow(QWidget):
     def run(self):
         QMainWindow.close(self)
 
-        # очистка первого окна для стрельбы
+    # очистка первого окна для стрельбы
 
     def cleaning_first(self):
         self.label_nachal.setText('')
@@ -184,14 +193,22 @@ class SecondWindow(QWidget):
 
     def dialog_nachalo(self):
         i, okBtn = QInputDialog.getInt(self,
-                                       'Количество жизней', 'Сколыько жизней?', 3, 1, 5, 1)
+                                       'Количество жизней', 'Сколько жизней?', 3, 1, 5, 1)
         if okBtn:
-            self.kol_hp = int(i)
+            self.kol_hp = i
             self.flag_pole = True
+
             self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
-            self.hello()
             self.hp.show()
 
+            self.hello()
+
+    def dialog_lvl(self):
+        i, okBtn = QInputDialog.getInt(self,
+                                       'Уровень', 'Какой уровень?', 1, 1, 1, 1)
+        if okBtn:
+            self.chosen_lvl = i
+            self.flag_lvl = True
     def hello(self):
         # показ инструкции
 
@@ -207,6 +224,7 @@ class SecondWindow(QWidget):
         self.pixmap = QPixmap('pushka (4).png')
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
+
         self.vse = {-45: (5, self.sdvig_y - 187), -5: (5, self.sdvig_y - 133),
                     -10: (6, self.sdvig_y - 139), -15: (6, self.sdvig_y - 148),
                     -30: (4, self.sdvig_y - 167), -35: (5, self.sdvig_y - 173),
@@ -216,6 +234,7 @@ class SecondWindow(QWidget):
                     -65: (11, self.sdvig_y - 210), -70: (14, self.sdvig_y - 214),
                     -75: (18, self.sdvig_y - 217), -80: (20, self.sdvig_y - 220),
                     -85: (24, self.sdvig_y - 223)}
+
         self.pic.move(5, self.sdvig_y - 186)
         self.pic.show()
 
@@ -236,6 +255,7 @@ class Main(QWidget):
         super().__init__()
         self.setGeometry(500, 200, 500, 500)
         self.setWindowTitle('The Pushka Game')
+
         self.flag_pushki = False
         self.flag_pole = False
 
@@ -258,6 +278,7 @@ class Main(QWidget):
     # стартовое окно перед началом игры
     def start(self):
         self.label_nachal.setText('Это игра "пушка"')
+
         self.pushButton = QPushButton('Играть', self)
         self.pushButton.setGeometry(185, 280, 150, 80)
         self.pushButton.clicked.connect(self.opening)
@@ -267,7 +288,7 @@ class Main(QWidget):
     def opening(self):
         if not self.secondWin:
             self.secondWin = SecondWindow(self)
-        self.secondWin.show()
+        self.secondWin = None
 
 
 if __name__ == '__main__':
