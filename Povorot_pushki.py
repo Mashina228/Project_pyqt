@@ -45,16 +45,16 @@ class SecondWindow(QWidget):
 
         self.start()
 
-        if self.flag_lvl and self.flag_pole:
+        if self.flag_lvl and self.flag_pole:  # показ вторго окна при нажатии ок вдиалоговых окнах
             self.show()
 
-        # стартовое окно перед начала игры
+    # стартовое окно перед начала игры
 
     def start(self):
         self.dialog_lvl()
         self.dialog_nachalo()
 
-        # считывание нажаний для подъема и опускания пушки
+    # считывание нажаний для подъема и опускания пушки
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_W or event.key() == 1062:  # поднять пушку
@@ -73,7 +73,7 @@ class SecondWindow(QWidget):
             self.kon = True
             self.flag = True
 
-        # отрисовка полета
+    # отрисовка полета
 
     def paintEvent(self, e):
         self.qp = QPainter()
@@ -82,12 +82,12 @@ class SecondWindow(QWidget):
         self.drawMishen(self.qp)
         self.qp.end()
 
-    def drawMishen(self, qp):  # Отрисовка мишени
-        if self.flag_pole and self.chosen_lvl == 1:
+    def drawMishen(self, qp):  # Отрисовка мишени для разных уровней
+        if self.flag_pole and self.chosen_lvl == 1:  # мишень первого уровня
             qp.setPen(Qt.black)
             qp.setBrush(QColor(248, 23, 62))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
-        elif self.flag_pole and self.chosen_lvl == 2:
+        elif self.flag_pole and self.chosen_lvl == 2:  # мишень первого уровня
             qp.setPen(Qt.black)
             qp.setBrush(QColor(248, 23, 62))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
@@ -178,17 +178,10 @@ class SecondWindow(QWidget):
                 self.pushButton2.show()
         self.kon = False
 
-        # закрытие окна конец программы
+    # закрытие окна, конец программы
 
     def run(self):
         QMainWindow.close(self)
-
-    # очистка первого окна для стрельбы
-
-    def cleaning_first(self):
-        self.label_nachal.setText('')
-        self.label_nachal.resize(1, 1)
-        self.pushButton.deleteLater()
 
     def cleaning_second(self):  # Фунция для будущего продолжения проекта
         self.pushButton2.deleteLater()
@@ -197,9 +190,10 @@ class SecondWindow(QWidget):
         self.pic.setPixmap(self.pixmap.transformed(t))
         self.pic.move()
 
-    def dialog_nachalo(self):
+    def dialog_nachalo(self):  # диалоговое окно для выбора количества жизней
         i, okBtn = QInputDialog.getInt(self,
-                                       'Количество жизней', 'Сколько жизней?', 3, 1, 5, 1)
+                                       'Количество жизней', 'Сколько жизней?',
+                                       3, 1, 5, 1)
         if okBtn:
             self.kol_hp = i
             self.flag_pole = True
@@ -207,11 +201,12 @@ class SecondWindow(QWidget):
             self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
             self.hp.show()
 
-            self.hello()
+            self.show_pushka()
 
-    def dialog_lvl(self):
+    def dialog_lvl(self):  # диалоговое окно для выбора уровня
         i, okBtn = QInputDialog.getInt(self,
-                                       'Уровень', 'Какой уровень?', 1, 1, 2, 1)
+                                       'Уровень', 'Какой уровень?',
+                                       1, 1, 2, 1)
         if okBtn:
             self.chosen_lvl = i
             if i == 1:
@@ -220,7 +215,7 @@ class SecondWindow(QWidget):
                 self.mish_x = randint(500, 1200)
             self.flag_lvl = True
 
-    def hello(self):
+    def show_pushka(self):
         # показ инструкции
 
         self.podskaz = QLabel('', self)
@@ -265,16 +260,13 @@ class Main(QWidget):
     def __init__(self):
         super().__init__()
         self.setGeometry(500, 200, 500, 500)
-        self.setWindowTitle('The Pushka Game')
+        self.setWindowTitle('Start')
 
-        self.flag_pushki = False
         self.flag_pole = False
 
         self.secondWin = None
 
-        # Блок настроек
-        self.flag = False
-        self.kon = True
+        # виджеты стартого окна
 
         self.label_nachal = QLabel('', self)
         self.label_nachal.setGeometry(200, 200, 200, 100)
