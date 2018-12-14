@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap, QTransform, \
     QPainter, QColor
 import math
 from PyQt5.QtCore import Qt
+from random import randint
 
 
 class SecondWindow(QWidget):
@@ -84,7 +85,11 @@ class SecondWindow(QWidget):
     def drawMishen(self, qp):  # Отрисовка мишени
         if self.flag_pole and self.chosen_lvl == 1:
             qp.setPen(Qt.black)
-            qp.setBrush(QColor(139, 69, 19))
+            qp.setBrush(QColor(248, 23, 62))
+            qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
+        elif self.flag_pole and self.chosen_lvl == 2:
+            qp.setPen(Qt.black)
+            qp.setBrush(QColor(248, 23, 62))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
 
         # Отрисовка траектории и поля
@@ -92,7 +97,7 @@ class SecondWindow(QWidget):
     def drawPoints(self, qp):
 
         if self.flag:
-            qp.setPen(Qt.red)
+            qp.setPen(Qt.blue)
             for i in range(round(self.v ** 2 * math.sin(
                     math.radians(self.a * 2)) / 9.8) + 1):
 
@@ -121,6 +126,7 @@ class SecondWindow(QWidget):
                         math.radians(self.a * 2)) / 9.8):
                     if self.kon:
                         self.vivod(False)
+
         if self.flag_pole:
 
             qp.setPen(Qt.green)
@@ -205,10 +211,15 @@ class SecondWindow(QWidget):
 
     def dialog_lvl(self):
         i, okBtn = QInputDialog.getInt(self,
-                                       'Уровень', 'Какой уровень?', 1, 1, 1, 1)
+                                       'Уровень', 'Какой уровень?', 1, 1, 2, 1)
         if okBtn:
             self.chosen_lvl = i
+            if i == 1:
+                self.mish_x = 700
+            elif i == 2:
+                self.mish_x = randint(500, 1200)
             self.flag_lvl = True
+
     def hello(self):
         # показ инструкции
 
