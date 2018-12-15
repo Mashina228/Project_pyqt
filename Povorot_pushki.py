@@ -165,7 +165,7 @@ class SecondWindow(QWidget):
         else:
             if self.kol_hp >= 2:
                 self.kol_hp -= 1
-                self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
+                self.hp.setText('Жизни: {}'.format('♡' * self.kol_hp))
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
@@ -203,7 +203,7 @@ class SecondWindow(QWidget):
             self.kol_hp = i
             self.flag_pole = True
 
-            self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
+            self.hp.setText('Жизни: {}'.format('♡' * self.kol_hp))
             self.hp.show()
 
             self.show_pushka()
@@ -216,7 +216,7 @@ class SecondWindow(QWidget):
             self.chosen_lvl = i
             if i == 1:
                 self.mish_x = 700
-                self.mish_y = self.svig_y
+                self.mish_y = self.sdvig_y
             elif i == 2:
                 self.mish_x = randint(500, 1200)
                 self.mish_y = self.sdvig_y
