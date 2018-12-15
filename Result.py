@@ -87,10 +87,15 @@ class SecondWindow(QWidget):
             qp.setPen(Qt.black)
             qp.setBrush(QColor(248, 23, 62))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
-        elif self.flag_pole and self.chosen_lvl == 2:  # мишень первого уровня
+        elif self.flag_pole and self.chosen_lvl == 2:  # мишень второго уровня
             qp.setPen(Qt.black)
             qp.setBrush(QColor(248, 23, 62))
             qp.drawRect(self.mish_x, self.sdvig_y - 120, 20, 120)
+
+        elif self.flag_pole and self.chosen_lvl == 3:  # мишень третьего уровня
+            qp.setPen(Qt.black)
+            qp.setBrush(QColor(248, 23, 62))
+            qp.drawRect(self.mish_x, self.mish_y - 120, 20, 120)
 
         # Отрисовка траектории и поля
 
@@ -117,7 +122,7 @@ class SecondWindow(QWidget):
                 qp.drawPoint(x + self.sdvig_x, self.sdvig_y - y)
 
                 if x + self.sdvig_x in range(self.mish_x, self.mish_x + 21) and self.sdvig_y - y in range(
-                        self.sdvig_y - 120, self.sdvig_y + 1):
+                        self.mish_y - 120, self.mish_y + 1):
                     if self.kon:
                         self.vivod(True)
                     break
@@ -160,7 +165,7 @@ class SecondWindow(QWidget):
         else:
             if self.kol_hp >= 2:
                 self.kol_hp -= 1
-                self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
+                self.hp.setText('Жизни: {}'.format('♡' * self.kol_hp))
             else:
                 self.kol_hp = self.poln_hp
                 self.hp.setText('You lose')
@@ -198,7 +203,7 @@ class SecondWindow(QWidget):
             self.kol_hp = i
             self.flag_pole = True
 
-            self.hp.setText('Жизни: {}'.format('0' * self.kol_hp))
+            self.hp.setText('Жизни: {}'.format('♡' * self.kol_hp))
             self.hp.show()
 
             self.show_pushka()
@@ -206,13 +211,18 @@ class SecondWindow(QWidget):
     def dialog_lvl(self):  # диалоговое окно для выбора уровня
         i, okBtn = QInputDialog.getInt(self,
                                        'Уровень', 'Какой уровень?',
-                                       1, 1, 2, 1)
+                                       1, 1, 3, 1)
         if okBtn:
             self.chosen_lvl = i
             if i == 1:
                 self.mish_x = 700
+                self.mish_y = self.sdvig_y
             elif i == 2:
                 self.mish_x = randint(500, 1200)
+                self.mish_y = self.sdvig_y
+            elif i == 3:
+                self.mish_x = randint(500, 800)
+                self.mish_y = randint(300, self.sdvig_y)
             self.flag_lvl = True
 
     def show_pushka(self):
