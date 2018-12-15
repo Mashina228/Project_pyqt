@@ -148,7 +148,7 @@ class SecondWindow(QWidget):
             self.hp.setText('You win')
 
             self.wining = QLabel(self)
-            pix = QPixmap('youwon1.png')
+            pix = QPixmap('youwon.png')
             self.wining.setPixmap(pix)
             self.wining.move(0, 0)
             self.wining.show()
@@ -227,7 +227,7 @@ class SecondWindow(QWidget):
 
         self.angel = -45
         self.pic = QLabel(self)
-        self.pixmap = QPixmap('pushka (4).png')
+        self.pixmap = QPixmap('pushka.png')
         t = QTransform().rotate(self.angel)
         self.pic.setPixmap(self.pixmap.transformed(t))
 
